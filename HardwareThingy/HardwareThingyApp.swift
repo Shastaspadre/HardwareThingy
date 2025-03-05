@@ -11,7 +11,7 @@ import SwiftUI
 struct HardwareThingyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HardwareConnectionView()
         }
     }
 }
