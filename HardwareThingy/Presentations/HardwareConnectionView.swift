@@ -17,14 +17,13 @@ struct HardwareConnectionView: View {
             }
             .disabled(viewModel.connectButtonDisabled)
             .buttonStyle(WideButton())
-            .padding()
             
             HStack {
                 Text("Connection state:")
                 Spacer()
                 Text(viewModel.connectionState)
             }
-            .padding()
         }
+        .padding()
     }
 }
