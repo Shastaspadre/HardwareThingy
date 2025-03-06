@@ -1,0 +1,28 @@
+{
+  "currentDevice" : {
+    "id" : "2025-001A",
+    "name" : "INSULET"
+  },
+  "pastDevices" : [
+    {
+      "id" : "1977-076A",
+      "name" : "Voyager 2"
+    },
+    {
+      "id" : "1977-084A",
+      "name" : "Voyager 1"
+    },
+    {
+      "name" : "New Horizons",
+      "id" : "2006-001A"
+    },
+    {
+      "id" : "1973-019A",
+      "name" : "Pioneer 11"
+    },
+    {
+      "name" : "Pioneer 10",
+      "id" : "1972-012A"
+    }
+  ]
+}

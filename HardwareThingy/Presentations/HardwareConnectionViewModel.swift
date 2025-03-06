@@ -8,10 +8,11 @@
 import Foundation
 import Combine
 
+@Observable
 @MainActor
-class HardwareConnectionViewModel: ObservableObject {
-    @Published private(set) var connectButtonDisabled = false
-    @Published private(set) var connectionState = ""
+class HardwareConnectionViewModel {
+    private(set) var connectButtonDisabled = false
+    private(set) var connectionState = ""
     
     private let hardwareProvider = HardwareProvider()
     
