@@ -8,7 +8,7 @@
 import Foundation
 
 actor HardwareProvider: HardwareProviderProtocol {
-    func connectToHardware(onConnectionStateChanged: (HardwareConnectionState) -> Void) {
+    func connectToHardware(onConnectionStateChanged: OnConnectionStateChanged) {
         onConnectionStateChanged(HardwareConnectionState.connecting)
         
         Thread.sleep(forTimeInterval: 2)
