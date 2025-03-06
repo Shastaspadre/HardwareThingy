@@ -24,7 +24,7 @@ class HardwareConnectionViewModel {
                 connectButtonDisabled = false
             }
             
-            for await connectionState in hardwareProvider.connectToHardware() {
+            await hardwareProvider.connectToHardware { connectionState in
                 self.connectionState = "\(connectionState)"
             }
         }

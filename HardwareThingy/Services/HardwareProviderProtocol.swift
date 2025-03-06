@@ -15,5 +15,7 @@ enum HardwareConnectionState {
 }
 
 protocol HardwareProviderProtocol {
-    func connectToHardware() -> any AsyncSequence<HardwareConnectionState, Never>
+    typealias OnConnectionStateChanged = (HardwareConnectionState) -> Void
+    
+    func connectToHardware(onConnectionStateChanged: OnConnectionStateChanged) async
 }
