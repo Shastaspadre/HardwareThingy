@@ -12,23 +12,10 @@ import Combine
 @Observable
 class HardwareConnectionViewModel {
     private(set) var connectButtonDisabled = false
-    private(set) var connectionState = ""
+    private(set) var connectionState = "🤷🏻"
     
     private let hardwareProvider = HardwareProvider()
-    
-    private var subscriptions = Set<AnyCancellable>()
-    
-    init() {
-        hardwareProvider.hardwareConnectionStatePublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { error in
-                print(error)
-            }, receiveValue: { [weak self] connectionState in
-                self?.connectionState = "\(connectionState)"
-            })
-            .store(in: &subscriptions)
-    }
-    
+        
     func connect() {
         connectButtonDisabled = true
 
@@ -37,7 +24,7 @@ class HardwareConnectionViewModel {
                 connectButtonDisabled = false
             }
             
-            if case .success(let connectionState) = await hardwareProvider.connectToHardware() {
+            for await connectionState in hardwareProvider.connectToHardware() {
                 self.connectionState = "\(connectionState)"
             }
         }

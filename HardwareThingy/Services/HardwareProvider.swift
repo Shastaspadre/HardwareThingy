@@ -8,17 +8,30 @@
 import Foundation
 import Combine
 
-class HardwareProvider: HardwareProviderProtocol {
-    private var hardwareConnectionStateSubject = CurrentValueSubject<HardwareConnectionState, Error>(.unknown)
-    lazy var hardwareConnectionStatePublisher = hardwareConnectionStateSubject.eraseToAnyPublisher()
+struct HardwareProvider: HardwareProviderProtocol {
+    func connectToHardware() -> any AsyncSequence<HardwareConnectionState, Never> {
+        HardwareConnector()
+    }
     
-    func connectToHardware() async -> Result<HardwareConnectionState, any Error> {
-        hardwareConnectionStateSubject.send(.connecting)
+    private struct HardwareConnector: AsyncSequence, AsyncIteratorProtocol {
+        private var connectionState = HardwareConnectionState.unknown
         
-        try? await Task.sleep(for: .seconds(2))
+        mutating func next() async -> HardwareConnectionState? {
+            switch connectionState {
+                case .unknown:
+                    connectionState = .connecting
+                    return connectionState
+                case .connecting:
+                    try? await Task.sleep(for: .seconds(1))
+                    connectionState = .connected
+                    return connectionState
+                default:
+                    return nil
+            }
+        }
         
-        hardwareConnectionStateSubject.send(.connecting)
-        
-        return .success(.connected)
+        func makeAsyncIterator() -> HardwareConnector {
+            self
+        }
     }
 }
