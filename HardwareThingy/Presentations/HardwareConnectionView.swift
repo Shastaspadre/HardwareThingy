@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HardwareConnectionView: View {
-    @ObservedObject private var viewModel = HardwareConnectionViewModel()
+    private var viewModel = HardwareConnectionViewModel()
     
     var body: some View {
         VStack {
@@ -26,4 +26,8 @@ struct HardwareConnectionView: View {
         }
         .padding()
     }
+}
+
+#Preview {
+    HardwareConnectionView()
 }
