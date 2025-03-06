@@ -21,9 +21,11 @@ class HardwareConnectionViewModel {
     init() {
         hardwareProvider.hardwareConnectionStatePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] connectionState in
+            .sink(receiveCompletion: { error in
+                print(error)
+            }, receiveValue: { [weak self] connectionState in
                 self?.connectionState = "\(connectionState)"
-            }
+            })
             .store(in: &subscriptions)
     }
     

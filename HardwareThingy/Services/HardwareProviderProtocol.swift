@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 enum HardwareConnectionState {
     case unknown
@@ -15,8 +16,7 @@ enum HardwareConnectionState {
 }
 
 protocol HardwareProviderProtocol {
-    var hardwareConnectionState: HardwareConnectionState { get }
-    var hardwareConnectionStatePublisher: Published<HardwareConnectionState>.Publisher { get }
+    var hardwareConnectionStatePublisher: AnyPublisher<HardwareConnectionState, Error> { get }
     
     func connectToHardware() async -> Result<HardwareConnectionState, Error>
 }

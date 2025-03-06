@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import Combine
 
 class HardwareProvider: HardwareProviderProtocol {
-    @Published private(set) var hardwareConnectionState = HardwareConnectionState.unknown
-    var hardwareConnectionStatePublisher: Published<HardwareConnectionState>.Publisher { $hardwareConnectionState }
+    private var hardwareConnectionStateSubject = CurrentValueSubject<HardwareConnectionState, Error>(.unknown)
+    lazy var hardwareConnectionStatePublisher = hardwareConnectionStateSubject.eraseToAnyPublisher()
     
     func connectToHardware() async -> Result<HardwareConnectionState, any Error> {
-        hardwareConnectionState = .connecting
+        hardwareConnectionStateSubject.send(.connecting)
         
         try? await Task.sleep(for: .seconds(2))
         
-        hardwareConnectionState = .connected
+        hardwareConnectionStateSubject.send(.connecting)
         
         return .success(.connected)
     }
