@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 struct HardwareProvider: HardwareProviderProtocol {
     func connectToHardware() -> any AsyncSequence<HardwareConnectionState, Never> {
