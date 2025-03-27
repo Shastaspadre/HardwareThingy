@@ -8,8 +8,10 @@
 import Foundation
 
 struct HardwareProvider: HardwareProviderProtocol {
+    private let hardwareConnector = HardwareConnector()
+    
     func connectToHardware() -> any AsyncSequence<HardwareConnectionState, Never> {
-        HardwareConnector()
+        hardwareConnector
     }
     
     private struct HardwareConnector: AsyncSequence, AsyncIteratorProtocol {
