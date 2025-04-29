@@ -15,5 +15,9 @@ enum HardwareConnectionState {
 }
 
 protocol HardwareProviderProtocol {
-    func connectToHardware() -> any AsyncSequence
+    var stream: AsyncStream<HardwareConnectionState> { get }
+    
+    func connectToHardware() async
+    
+//    func connectToHardware() -> any AsyncSequence
 }

@@ -15,18 +15,42 @@ class HardwareConnectionViewModel {
     private(set) var connectionState = "🤷🏻"
     
     private let hardwareProvider = HardwareProvider()
-        
+    
+    init() {
+        listenToConnectionStateChanges()
+    }
+    
+    private func listenToConnectionStateChanges() {
+        Task {
+            for try await connectionState in hardwareProvider.stream {
+                self.connectionState = "\(connectionState)"
+            }
+        }
+    }
+    
     func connect() {
         connectButtonDisabled = true
-
+        
         Task {
             defer {
                 connectButtonDisabled = false
             }
             
-            for try await connectionState in hardwareProvider.connectToHardware() {
-                self.connectionState = "\(connectionState)"
-            }
+            await hardwareProvider.connectToHardware()
         }
     }
+        
+//    func connect() {
+//        connectButtonDisabled = true
+//
+//        Task {
+//            defer {
+//                connectButtonDisabled = false
+//            }
+//            
+//            for try await connectionState in hardwareProvider.connectToHardware() {
+//                self.connectionState = "\(connectionState)"
+//            }
+//        }
+//    }
 }
