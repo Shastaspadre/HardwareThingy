@@ -45,6 +45,11 @@
 			path = HardwareThingyUITests;
 			sourceTree = "<group>";
 		};
+		9E4D9E032D7F3A7C00F40DEA /* Contacts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Contacts;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +80,7 @@
 		9E4D9DBB2D77C82E00F40DEA = {
 			isa = PBXGroup;
 			children = (
+				9E4D9E032D7F3A7C00F40DEA /* Contacts */,
 				9E4D9DC62D77C82E00F40DEA /* HardwareThingy */,
 				9E4D9DD72D77C83100F40DEA /* HardwareThingyTests */,
 				9E4D9DE12D77C83100F40DEA /* HardwareThingyUITests */,
@@ -109,6 +115,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				9E4D9DC62D77C82E00F40DEA /* HardwareThingy */,
+				9E4D9E032D7F3A7C00F40DEA /* Contacts */,
 			);
 			name = HardwareThingy;
 			packageProductDependencies = (
