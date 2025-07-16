@@ -14,7 +14,7 @@ struct MockHardwareProvider: HardwareProviderProtocol {
     
     private let subject: CurrentValueSubject<HardwareThingy.HardwareConnectionState, Error> = .init(.unknown)
     var hardwareConnectionStatePublisher: AnyPublisher<HardwareThingy.HardwareConnectionState, any Error> {
-        subject.eraseToAnyPublisher()
+        subject.dropFirst().eraseToAnyPublisher()
     }
     
     var stubConnectionState: HardwareThingy.HardwareConnectionState
@@ -26,6 +26,7 @@ struct MockHardwareProvider: HardwareProviderProtocol {
     }
     
     func connectToHardware() async throws -> HardwareThingy.HardwareConnectionState {
+        subject.send(completion: .finished)
         if let stubError {
             throw stubError
         }

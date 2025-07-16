@@ -1,117 +1,146 @@
 //
 //  HardwareConnectionViewModelTests.swift
-//  HardwareThingyTests
+//  HardwareThingy
 //
-//  Created by Robert Dates on 7/15/25.
+//  Created by Robert Dates on 7/16/25.
 //
-import XCTest
+
+
+import Testing
 @testable import HardwareThingy
 
-@MainActor
-class HardwareConnectionViewModelTests: XCTestCase {
+struct HardwareConnectionViewModelTests {
     
-    func testInitialization() {
+    @Test func testHardwareConnectionViewModelInit() async  {
         // Given
-        let connectionState: HardwareConnectionState = .unknown
-        let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState)
+        let mockHardWareProvider = MockHardwareProvider(stubConnectionState: .unknown)
         
         // When
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // Then
-        XCTAssertEqual("", sut.connectionState)
-        XCTAssertFalse(sut.connectButtonDisabled)
+        await MainActor.run {
+            #expect("" == sut.connectionState)
+            #expect(false == sut.connectButtonDisabled)
+        }
     }
     
-    func testConnectionButtonDisabledOnInitialConnectButtonPress() async {
+    @Test func testConnectionButtonDisabledOnInitialConnectButtonPress() async {
         // Given
         let connectionState: HardwareConnectionState = .unknown
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
-        
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         // When
         await sut.connect()
         
         // Then
-        XCTAssertTrue(sut.connectButtonDisabled)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == true)
+        }
     }
     
-    func testViewStateOnConnectionSuccess() async {
+    @Test func testViewStateOnConnectionSuccess() async {
         // Given
         let connectionState: HardwareConnectionState = .connected
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // When
         await sut.connect()
         
         // Then
-        XCTAssertFalse(sut.connectButtonDisabled)
-        XCTAssertEqual(HardwareConnectionState.connected.connectionStateString, sut.connectionState)
-        XCTAssertEqual(sut.retryAttempts, 0)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == false)
+            #expect(HardwareConnectionState.connected.connectionStateString == sut.connectionState)
+            #expect(sut.retryAttempts == 0)
+        }
     }
 
-    func testViewStateOnConnectionFailureExpiredPod() async {
+    @Test func testViewStateOnConnectionFailureExpiredPod() async {
         // Given
         let connectionState: HardwareConnectionState = .unknown
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState, error: .expiredPod)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // When
         await sut.connect()
         
         // Then
-        XCTAssertTrue(sut.connectButtonDisabled)
-        XCTAssertEqual(HardwareConnectionViewModel.Constants.expiredPodStatusMessage, sut.connectionState)
-        XCTAssertEqual(sut.retryAttempts, 0)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == true)
+            #expect(HardwareConnectionViewModel.Constants.expiredPodStatusMessage == sut.connectionState)
+            #expect(sut.retryAttempts == 0)
+        }
     }
 
-    func testViewStateOnConnectionFailureLowPowerLevel() async {
+    @Test func testViewStateOnConnectionFailureLowPowerLevel() async {
         // Given
         let connectionState: HardwareConnectionState = .unknown
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState, error: .lowPowerLevel)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // When
         await sut.connect()
         
         // Then
-        XCTAssertFalse(sut.connectButtonDisabled)
-        XCTAssertEqual(HardwareConnectionViewModel.Constants.lowPowerLevelStatusMessage, sut.connectionState)
-        XCTAssertEqual(sut.retryAttempts, 0)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == false)
+            #expect(HardwareConnectionViewModel.Constants.lowPowerLevelStatusMessage == sut.connectionState)
+            #expect(sut.retryAttempts == 0)
+        }
     }
 
-    func testViewStateOnConnectionFailureHardwareFailure() async {
+    @Test func testViewStateOnConnectionFailureHardwareFailure() async {
         // Given
         let connectionState: HardwareConnectionState = .unknown
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState, error: .hardwareFailure)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // When
         await sut.connect()
         
         // Then
-        XCTAssertTrue(sut.connectButtonDisabled)
-        XCTAssertEqual(HardwareConnectionViewModel.Constants.hardwareFailureStatusMessage, sut.connectionState)
-        XCTAssertEqual(sut.retryAttempts, 0)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == true)
+            #expect(HardwareConnectionViewModel.Constants.hardwareFailureStatusMessage == sut.connectionState)
+            #expect(sut.retryAttempts == 0)
+        }
     }
 
-    func testViewStateOnConnectionFailureLostSignalMaxAttempts() async {
+    @Test func testViewStateOnConnectionFailureLostSignalMaxAttempts() async {
         // Given
         let connectionState: HardwareConnectionState = .unknown
         let mockHardWareProvider = MockHardwareProvider(stubConnectionState: connectionState, error: .lostSignal)
-        let sut = HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        let sut = await MainActor.run {
+            HardwareConnectionViewModel(hardwareProvider: mockHardWareProvider)
+        }
         
         // When
         await sut.connect()
         
         // Then
-        XCTAssertFalse(sut.connectButtonDisabled)
-        XCTAssertEqual(HardwareConnectionViewModel.Constants.lostSignalStatusMaxAttemptsReachedMessage, sut.connectionState)
-        XCTAssertEqual(sut.retryAttempts, 4)
+        await MainActor.run {
+            #expect(sut.connectButtonDisabled == false)
+            #expect(HardwareConnectionViewModel.Constants.lostSignalStatusMaxAttemptsReachedMessage == sut.connectionState)
+            #expect(sut.retryAttempts == 4)
+        }
     }
-    
-    func testViewStateOnConnectionFailureLostSignalUnderMaxAttempts() async {
+
+    @Test func testViewStateOnConnectionFailureLostSignalUnderMaxAttempts() async {
         // TODO: Could add logging to be used to assert here. Also logging would be beneficial to the application for general usage purposes.
     }
+
 }
