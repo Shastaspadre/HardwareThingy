@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct HardwareConnectionView: View {
-    private var viewModel = HardwareConnectionViewModel()
-    
+    private var viewModel = HardwareConnectionViewModel(hardwareProvider: HardwareProvider())
+    // TODO: - add accessibilty labels for XCUITesting
     var body: some View {
         VStack {
             Button("Connect") {
-                viewModel.connect()
+                Task {
+                    await viewModel.connect()
+                }
             }
             .disabled(viewModel.connectButtonDisabled)
             .buttonStyle(WideButton())
@@ -26,6 +28,8 @@ struct HardwareConnectionView: View {
         }
         .padding()
     }
+    
+    
 }
 
 #Preview {
