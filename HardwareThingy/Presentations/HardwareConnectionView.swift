@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HardwareConnectionView: View {
     private var viewModel = HardwareConnectionViewModel(hardwareProvider: HardwareProvider())
-    
+    // TODO: - add accessibilty labels for XCUITesting
     var body: some View {
         VStack {
             Button("Connect") {
